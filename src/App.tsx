@@ -22,6 +22,7 @@ export default function App() {
     storeActions.init();
     saveInterval.current = setInterval(() => {
       storeActions.saveProgress();
+      // Saves progress automaticallt each 30 seconds
     }, 30 * 1000);
 
     return () => {
@@ -35,6 +36,7 @@ export default function App() {
         titleUpdater.current -= 1;
       } else {
         titleUpdater.current = 20;
+        // Updates browser title every 2 seconds (useful when tab is out of focus)
         storeActions.updateWindowTitle();
       }
       storeActions.update();
@@ -62,6 +64,7 @@ export default function App() {
     let worker: Worker;
     interval.current = createSetInterval();
     if (window.Worker) {
+      // Creates the web worker which will operate only when tab is out of focus.
       worker = new Worker(new URL("./worker.js", import.meta.url));
       window.addEventListener("blur", handleWindowBlur);
       window.addEventListener("focus", handleWindowFocus);
@@ -102,11 +105,13 @@ export default function App() {
         <Stat />
         <SaveProgress />
         <Styled.Column>
+          <h2>Upgrades</h2>
           {availableUpgrades.map((upgrade) => (
             <UpgradeItem key={upgrade.id} item={upgrade} />
           ))}
         </Styled.Column>
         <Styled.Column>
+          <h2>Producers</h2>
           {config.producers.map((producer) => (
             <ProducerItem key={producer.id} item={producer} />
           ))}

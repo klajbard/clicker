@@ -1,3 +1,8 @@
+// TODO: Find a way to implement worker in typescript
+
+const POLL_FREQUENCY = 0.5;
+// Store the tab state in a variable to only calculate
+// in worker when necessary
 let isBlurred = false;
 let count,
   dps,
@@ -5,7 +10,7 @@ let count,
   pushIteration = 5,
   saveIteration = 51;
 const updateCount = () => {
-  count += 0.5 * dps;
+  count += POLL_FREQUENCY * dps;
 };
 
 self.onmessage = ({ data: _data }) => {
@@ -26,7 +31,7 @@ self.onmessage = ({ data: _data }) => {
         }
         pushIteration--;
         saveIteration--;
-      }, 600);
+      }, POLL_FREQUENCY * 1000);
     }
     isBlurred = true;
   } else if (event === "focus" && isBlurred) {

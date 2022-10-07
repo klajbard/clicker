@@ -16,6 +16,7 @@ const state = proxy<IStore>({
 const roundToOneDecimal = (num: number) =>
   Math.round((num + Number.EPSILON) * 10) / 10;
 
+// Core logic behind calculating the various dps for both clicking and producers
 const calculateDps = () => {
   let damageFromProducers = 0;
 

@@ -1,8 +1,10 @@
 import { IConfig, ProducerID, UpgradeType } from "./types";
 
 // Test config to initially cover different cases
+// Global config to hold values for available upgrades, etc.
 const config: IConfig = {
   upgrades: [
+    // Upgrades multiplying click power
     { id: "ca", multiply: 2, type: UpgradeType.CLICK, price: 50 },
     { id: "cb", multiply: 2, type: UpgradeType.CLICK, price: 700 },
     { id: "cc", multiply: 2, type: UpgradeType.CLICK, price: 5000 },
@@ -10,9 +12,7 @@ const config: IConfig = {
     { id: "ce", multiply: 5, type: UpgradeType.CLICK, price: 195000 },
     { id: "cf", multiply: 5, type: UpgradeType.CLICK, price: 1000000 },
     { id: "cg", multiply: 10, type: UpgradeType.CLICK, price: 65000000 },
-    { id: "xaa", multiply: 0.1, type: UpgradeType.ALL, price: 14000 },
-    { id: "xab", multiply: 0.1, type: UpgradeType.ALL, price: 678000 },
-    { id: "xac", multiply: 0.1, type: UpgradeType.ALL, price: 25000000 },
+    // Upgrades multiplying specific producer power
     {
       id: "baa",
       multiply: 2,
@@ -34,7 +34,12 @@ const config: IConfig = {
       price: 2000000,
       producerID: ProducerID.ba,
     },
+    // Upgrades multiplying both click power and produce power
+    { id: "xaa", multiply: 0.1, type: UpgradeType.ALL, price: 14000 },
+    { id: "xab", multiply: 0.1, type: UpgradeType.ALL, price: 678000 },
+    { id: "xac", multiply: 0.1, type: UpgradeType.ALL, price: 25000000 },
   ],
+  // Producers generating points over time
   producers: [
     { id: "ba", produce: 1, basePrice: 10 },
     { id: "bb", produce: 10, basePrice: 140 },
