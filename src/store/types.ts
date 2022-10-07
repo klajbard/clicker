@@ -1,5 +1,5 @@
 export type TStoreProducer = {
-  name: string;
+  id: string;
   count: number;
   dps: number;
 };

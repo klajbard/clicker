@@ -7,10 +7,10 @@ import * as Styled from "./styled";
 
 function UpgradeItem({ item }: { item: IUpgradeItem }) {
   const state = useProgress();
-  const { name, price, multiply, type, producerName } = item;
+  const { id, price, multiply, type, producerID } = item;
   const handleClick = () => {
     if (state.count > price) {
-      storeActions.addUpgrade(name);
+      storeActions.addUpgrade(id);
       storeActions.addCount(-price);
     }
   };
@@ -19,15 +19,15 @@ function UpgradeItem({ item }: { item: IUpgradeItem }) {
     if (type === UpgradeType.CLICK) {
       return `Multiplies clicking power by ${multiply}x!`;
     } else if (type === UpgradeType.ALL) {
-      return `Multiply clicking rate by ${multiply}x of DPS!`;
+      return `Multiply clicking rate by ${multiply * 100}% of DPS!`;
     } else if (type === UpgradeType.PRODUCER) {
-      return `Multiplies produce rate of ${producerName} by ${multiply}x!`;
+      return `Multiplies produce rate of ${producerID} by ${multiply}x!`;
     }
   }, [type]);
 
   return (
     <Styled.Container onClick={handleClick}>
-      <Styled.Title>{name}</Styled.Title>
+      <Styled.Title>{id}</Styled.Title>
       <Styled.Price>{price}</Styled.Price>
       <Styled.Description>{description}</Styled.Description>
     </Styled.Container>

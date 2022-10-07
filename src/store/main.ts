@@ -26,7 +26,7 @@ const calculateDps = () => {
   // Set all producer values to the base produce amount
   state.producers.forEach((producer) => {
     const matchedProducer = config.producers.find(
-      (producerItem) => producerItem.name === producer.name
+      (producerItem) => producerItem.id === producer.id
     );
     if (matchedProducer) {
       producer.dps = matchedProducer.produce;
@@ -35,10 +35,10 @@ const calculateDps = () => {
 
   // Apply all producer based upgrades to update DPS
   state.upgrades.forEach((upgrade) => {
-    const matchedUpgrade = config.upgrades.find(({ name }) => upgrade === name);
+    const matchedUpgrade = config.upgrades.find(({ id }) => upgrade === id);
     if (matchedUpgrade?.type === UpgradeType.PRODUCER) {
       const matchedProducer = state.producers.find(
-        (producer) => producer.name === matchedUpgrade.producerName
+        (producer) => producer.id === matchedUpgrade.producerID
       );
       if (matchedProducer) {
         matchedProducer.dps = matchedProducer.dps * matchedUpgrade.multiply;
@@ -53,7 +53,7 @@ const calculateDps = () => {
 
   // Calculate click DPS
   state.upgrades.forEach((upgrade) => {
-    const matchedUpgrade = config.upgrades.find(({ name }) => upgrade === name);
+    const matchedUpgrade = config.upgrades.find(({ id }) => upgrade === id);
     switch (matchedUpgrade?.type) {
       case UpgradeType.CLICK:
         state.clickDps = state.clickDps * (matchedUpgrade?.multiply || 1);
@@ -111,18 +111,18 @@ export const storeActions = {
     }
     calculateDps();
   },
-  hasUpgrade(name: string) {
-    return state.upgrades.indexOf(name) !== -1;
+  hasUpgrade(id: string) {
+    return state.upgrades.indexOf(id) !== -1;
   },
   increaseProducer(producer: IProducerItem) {
     const matchedProducer = state.producers.find(
-      (_producer) => _producer.name === producer.name
+      (_producer) => _producer.id === producer.id
     );
     if (matchedProducer) {
       matchedProducer.count += 1;
     } else {
       state.producers.push({
-        name: producer.name,
+        id: producer.id,
         count: 1,
         dps: producer.produce,
       });

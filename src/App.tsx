@@ -13,8 +13,8 @@ import { TWorkerMessage } from "./types";
 export default function App() {
   const config = useConfig();
   const state = useProgress();
-  const interval = useRef<NodeJS.Timeout>();
-  const saveInterval = useRef<NodeJS.Timeout>();
+  const interval = useRef<ReturnType<typeof setTimeout>>();
+  const saveInterval = useRef<ReturnType<typeof setTimeout>>();
   const localState = useRef({ count: 0, dps: 0 });
   const titleUpdater = useRef<number>(20);
 
@@ -90,9 +90,7 @@ export default function App() {
 
   const availableUpgrades = useMemo(
     () =>
-      config.upgrades.filter(
-        (upgrade) => !storeActions.hasUpgrade(upgrade.name)
-      ),
+      config.upgrades.filter((upgrade) => !storeActions.hasUpgrade(upgrade.id)),
     [state.upgrades]
   );
 
@@ -105,12 +103,12 @@ export default function App() {
         <SaveProgress />
         <Styled.Column>
           {availableUpgrades.map((upgrade) => (
-            <UpgradeItem key={upgrade.name} item={upgrade} />
+            <UpgradeItem key={upgrade.id} item={upgrade} />
           ))}
         </Styled.Column>
         <Styled.Column>
           {config.producers.map((producer) => (
-            <ProducerItem key={producer.name} item={producer} />
+            <ProducerItem key={producer.id} item={producer} />
           ))}
         </Styled.Column>
       </Styled.Wrapper>

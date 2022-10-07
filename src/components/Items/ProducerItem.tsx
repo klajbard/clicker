@@ -7,9 +7,9 @@ import * as Styled from "./styled";
 
 function ProducerItem({ item }: { item: IProducerItem }) {
   const state = useProgress();
-  const { basePrice, name, produce } = item;
+  const { basePrice, id, produce } = item;
   const producerFromState = state.producers.find(
-    (_producer) => _producer.name === item.name
+    (_producer) => _producer.id === item.id
   );
 
   const price = useMemo(
@@ -26,7 +26,7 @@ function ProducerItem({ item }: { item: IProducerItem }) {
 
   return (
     <Styled.Container onClick={handleClick}>
-      <Styled.Title>{name}</Styled.Title>
+      <Styled.Title>{id}</Styled.Title>
       <Styled.Price>{price}</Styled.Price>
       <Styled.Count>{producerFromState?.count}</Styled.Count>
       <Styled.Description>

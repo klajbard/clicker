@@ -4,7 +4,7 @@ export enum UpgradeType {
   ALL = "all",
 }
 
-export enum ProducerName {
+export enum ProducerID {
   all = "all",
   ba = "ba",
   bb = "bb",
@@ -14,15 +14,15 @@ export enum ProducerName {
 }
 
 export interface IUpgradeItem {
-  name: string;
+  id: string;
   price: number;
   multiply: number;
   type: UpgradeType;
-  producerName?: string;
+  producerID?: string;
 }
 
 export interface IProducerItem {
-  name: string;
+  id: string;
   basePrice: number;
   produce: number;
 }

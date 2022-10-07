@@ -4,7 +4,6 @@ import { storeActions } from "../../store/main";
 
 import * as Styled from "./styled";
 
-
 const SaveProgress = () => {
   const handleClick = () => {
     storeActions.saveProgress();
