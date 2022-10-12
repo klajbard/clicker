@@ -26,7 +26,7 @@ function UpgradeItem({ item }: { item: IUpgradeItem }) {
   }, [type]);
 
   return (
-    <Styled.Container onClick={handleClick}>
+    <Styled.Container onClick={handleClick} disabled={state.count < price}>
       <Styled.Title>{id}</Styled.Title>
       <Styled.Price>{price}</Styled.Price>
       <Styled.Description>{description}</Styled.Description>

@@ -6,6 +6,7 @@ export const Container = styled.button`
     "title title"
     "price count"
     "descr descr";
+  max-width: 15rem;
   padding: 0.5rem;
   background: none;
   cursor: pointer;
@@ -13,14 +14,16 @@ export const Container = styled.button`
   outline: none;
   border-radius: 0.5rem;
 
-  &:hover,
-  &:focus-visible {
-    box-shadow: inset 1px 1px 0 #000;
-  }
+  &:not(:disabled) {
+    &:hover,
+    &:focus-visible {
+      box-shadow: inset 1px 1px 0 #000;
+    }
 
-  &:active {
-    box-shadow: inset 0 0 0 1px #000;
-    background-color: #0000000f;
+    &:active {
+      box-shadow: inset 0 0 0 1px #000;
+      background-color: #0000000f;
+    }
   }
 `;
 

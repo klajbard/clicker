@@ -1,45 +1,55 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
 
 import { storeActions, useProgress } from "../../store/main";
 
-const animateHit = keyframes`
-  0% {}
-  80% {visibility: 1;}
-  99% {visibility: 0;}
-  100% {display: none;}
+const TriggerButton = styled.button`
+  width: 100%;
+  max-width: 50rem;
+  height: 15rem;
+  font-size: 6rem;
+  cursor: pointer;
+  background: none;
+  border: 2px solid black;
 `;
-
-const HitContainer = styled.div`
-  position: fixed;
-  left: 150px;
-  display: flex;
-  flex-direction: column;
-  max-height: 10rem;
-  overflow: hidden;
-`;
-
-const StyledHit = styled.span`
-  height: 2rem;
-  /* animation: ${animateHit} 5s linear;
-  animation-fill-mode: forwards; */
-`;
-const Hit: React.FC = ({ children }) => {
-  return <StyledHit>{children}</StyledHit>;
-};
 
 const Trigger = () => {
   const state = useProgress();
+  const timeOuts = useRef<number[]>([]);
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const hit = document.createElement("div");
+    hit.innerText = `+${state.clickDps}`;
+    hit.style.position = "fixed";
+    hit.style.left = `${event.clientX}px`;
+    hit.style.top = `${event.clientY}px`;
+    hit.style.pointerEvents = "none";
+    hit.style.transition = "all 2s ease-out";
     console.log("DMG", state.clickDps);
+    document.body.appendChild(hit);
+
+    const removeTimeout = window.setTimeout(() => {
+      hit.remove();
+    }, 2000);
+    window.setTimeout(() => {
+      hit.style.transform = "translateY(-300%)";
+      hit.style.opacity = "0";
+    }, 0);
+    timeOuts.current.push(removeTimeout);
+
     storeActions.addCount(state.clickDps);
   };
 
+  useEffect(() => {
+    return () => {
+      timeOuts.current.forEach(window.clearTimeout);
+    };
+  }, []);
+
   return (
     <>
-      <button onClick={handleClick}>Click!</button>
-      <Hit>{state.clickDps}</Hit>
+      <TriggerButton onClick={handleClick}>Click!</TriggerButton>
+      <div>{state.clickDps}</div>
     </>
   );
 };

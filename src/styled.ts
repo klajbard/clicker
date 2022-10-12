@@ -48,4 +48,17 @@ export const Wrapper = styled.div`
 
 export const Column = styled.div`
   padding: 1rem 0 2rem;
+  width: 100%;
+`;
+
+export const UpgradesWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+`;
+
+export const SectionTitle = styled.h2`
+  text-align: center;
 `;

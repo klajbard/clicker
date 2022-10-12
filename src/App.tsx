@@ -105,16 +105,20 @@ export default function App() {
         <Stat />
         <SaveProgress />
         <Styled.Column>
-          <h2>Upgrades</h2>
-          {availableUpgrades.map((upgrade) => (
-            <UpgradeItem key={upgrade.id} item={upgrade} />
-          ))}
+          <Styled.SectionTitle>Upgrades</Styled.SectionTitle>
+          <Styled.UpgradesWrapper>
+            {availableUpgrades.map((upgrade) => (
+              <UpgradeItem key={upgrade.id} item={upgrade} />
+            ))}
+          </Styled.UpgradesWrapper>
         </Styled.Column>
         <Styled.Column>
-          <h2>Producers</h2>
-          {config.producers.map((producer) => (
-            <ProducerItem key={producer.id} item={producer} />
-          ))}
+          <Styled.SectionTitle>Producers</Styled.SectionTitle>
+          <Styled.UpgradesWrapper>
+            {config.producers.map((producer) => (
+              <ProducerItem key={producer.id} item={producer} />
+            ))}
+          </Styled.UpgradesWrapper>
         </Styled.Column>
       </Styled.Wrapper>
     </>

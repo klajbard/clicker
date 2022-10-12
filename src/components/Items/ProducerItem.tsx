@@ -25,7 +25,7 @@ function ProducerItem({ item }: { item: IProducerItem }) {
   };
 
   return (
-    <Styled.Container onClick={handleClick}>
+    <Styled.Container onClick={handleClick} disabled={state.count < price}>
       <Styled.Title>{id}</Styled.Title>
       <Styled.Price>{price}</Styled.Price>
       <Styled.Count>{producerFromState?.count}</Styled.Count>
