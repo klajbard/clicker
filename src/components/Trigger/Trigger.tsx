@@ -13,27 +13,41 @@ const TriggerButton = styled.button`
   border: 2px solid black;
 `;
 
+const createHitElement = (
+  hit: number,
+  positionX: number,
+  positionY: number
+) => {
+  const hitElement = document.createElement("div");
+  hitElement.innerText = `+${hit}`;
+  hitElement.style.position = "fixed";
+  hitElement.style.left = `${positionX}px`;
+  hitElement.style.top = `${positionY}px`;
+  hitElement.style.pointerEvents = "none";
+  hitElement.style.transition = "all 2s ease-out";
+
+  return hitElement;
+};
+
 const Trigger = () => {
   const state = useProgress();
   const timeOuts = useRef<number[]>([]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const hit = document.createElement("div");
-    hit.innerText = `+${state.clickDps}`;
-    hit.style.position = "fixed";
-    hit.style.left = `${event.clientX}px`;
-    hit.style.top = `${event.clientY}px`;
-    hit.style.pointerEvents = "none";
-    hit.style.transition = "all 2s ease-out";
+    const hitElement = createHitElement(
+      state.clickDps,
+      event.clientX,
+      event.clientY
+    );
+    document.body.appendChild(hitElement);
     console.log("DMG", state.clickDps);
-    document.body.appendChild(hit);
 
     const removeTimeout = window.setTimeout(() => {
-      hit.remove();
+      hitElement.remove();
     }, 2000);
     window.setTimeout(() => {
-      hit.style.transform = "translateY(-300%)";
-      hit.style.opacity = "0";
+      hitElement.style.transform = "translateY(-300%)";
+      hitElement.style.opacity = "0";
     }, 0);
     timeOuts.current.push(removeTimeout);
 
