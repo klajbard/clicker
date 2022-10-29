@@ -9,6 +9,7 @@ export interface IStore {
   clickDps: number;
   producerDps: number;
   producers: TStoreProducer[];
+  sumPurchases: number;
   upgrades: string[];
 }
 

@@ -18,11 +18,22 @@ const createHitElement = (
   positionX: number,
   positionY: number
 ) => {
+  const offsets = {
+    y: 10 * (Math.random() - 0.5 - 1),
+    x: 50 * (Math.random() - 0.5 - 0.2),
+    // y: 10 * ((0 - 0.5) - 1),
+    // x: 50 * ((0 - 0.5) - 0.3),
+    // yMax: 10 * ((1 - 0.5) - 1),
+    // xMax: 50 * ((1 - 0.5) - 0.3),
+  };
   const hitElement = document.createElement("div");
   hitElement.innerText = `+${hit}`;
   hitElement.style.position = "fixed";
-  hitElement.style.left = `${positionX}px`;
-  hitElement.style.top = `${positionY}px`;
+  hitElement.style.left = `${positionX + offsets.x}px`;
+  hitElement.style.top = `${positionY + offsets.y}px`;
+  // hitElement.style.height = `${offsets.yMax - offsets.y}px`;
+  // hitElement.style.width = `${offsets.xMax - offsets.x}px`;
+  hitElement.style.background = "red";
   hitElement.style.pointerEvents = "none";
   hitElement.style.transition = "all 2s ease-out";
 
@@ -40,7 +51,6 @@ const Trigger = () => {
       event.clientY
     );
     document.body.appendChild(hitElement);
-    console.log("DMG", state.clickDps);
 
     const removeTimeout = window.setTimeout(() => {
       hitElement.remove();

@@ -58,7 +58,7 @@ const useWorker = () => {
     interval.current = createSetInterval();
     if (window.Worker) {
       // Creates the web worker which will operate only when tab is out of focus.
-      worker = new Worker(new URL("./worker.js", import.meta.url));
+      worker = new Worker(new URL("../worker.js", import.meta.url));
       window.addEventListener("blur", handleWindowBlur);
       window.addEventListener("focus", handleWindowFocus);
       worker.onmessage = ({ data }: TWorkerMessage) => {

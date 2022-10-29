@@ -1,6 +1,6 @@
 import { proxy, useSnapshot } from "valtio";
 
-import config from "../config";
+import config, { PRODUCER_POW } from "../config";
 import { IProducerItem, UpgradeType } from "../types";
 
 import { IStore, IStoreRead } from "./types";
@@ -10,6 +10,7 @@ const state = proxy<IStore>({
   clickDps: 1,
   producerDps: 0,
   producers: [],
+  sumPurchases: 0,
   upgrades: [],
 });
 
@@ -18,8 +19,6 @@ const roundToOneDecimal = (num: number) =>
 
 // Core logic behind calculating the various dps for both clicking and producers
 const calculateDps = () => {
-  let damageFromProducers = 0;
-
   // Reset dps values
   state.clickDps = 1;
   state.producerDps = 0;
@@ -47,27 +46,36 @@ const calculateDps = () => {
     }
   });
 
-  // Calculate summarized DPS
-  state.producers.forEach((producer) => {
-    state.producerDps += producer.dps * producer.count;
-  });
+  let allMultiplier = 0;
+  let clickMultiplier = 0;
+  const damageFromProducers = 0;
 
   // Calculate click DPS
   state.upgrades.forEach((upgrade) => {
     const matchedUpgrade = config.upgrades.find(({ id }) => upgrade === id);
     switch (matchedUpgrade?.type) {
       case UpgradeType.CLICK:
-        state.clickDps = state.clickDps * (matchedUpgrade?.multiply || 1);
+        clickMultiplier += matchedUpgrade.multiply;
         break;
       case UpgradeType.ALL:
-        damageFromProducers += Math.round(
-          state.producerDps * matchedUpgrade.multiply
-        );
+        allMultiplier += matchedUpgrade.multiply;
         break;
     }
   });
 
-  state.clickDps = state.clickDps + damageFromProducers;
+  state.clickDps =
+    Math.round(
+      ((state.clickDps + damageFromProducers) *
+        clickMultiplier *
+        (1 + allMultiplier) +
+        Number.EPSILON) *
+        100
+    ) / 100;
+
+  // Calculate summarized DPS
+  state.producers.forEach((producer) => {
+    state.producerDps += producer.dps * producer.count * (1 + allMultiplier);
+  });
 };
 
 export const storeActions = {
@@ -75,9 +83,24 @@ export const storeActions = {
     const localState = localStorage.getItem("clicker.state");
     if (localState) {
       const localStateObj = JSON.parse(localState) as IStoreRead;
+      let sumPurchases = 0;
       state.count = localStateObj.count;
       state.producers = localStateObj.producers;
       state.upgrades = localStateObj.upgrades;
+      // Sum of geometric series
+      // https://en.wikipedia.org/wiki/Geometric_series
+      localStateObj.producers.forEach((producer) => {
+        sumPurchases +=
+          (1 - Math.pow(PRODUCER_POW, producer.count)) / (1 - PRODUCER_POW);
+      });
+
+      localStateObj.upgrades.forEach((upgrade) => {
+        sumPurchases +=
+          config.upgrades.find((configUpgrade) => configUpgrade.id === upgrade)
+            ?.price || 0;
+      });
+
+      state.sumPurchases = Math.floor(sumPurchases);
     }
     calculateDps();
   },
@@ -106,16 +129,20 @@ export const storeActions = {
   increaseDPS(dps: number) {
     state.producerDps += dps;
   },
-  addUpgrade(upgrade: string) {
+  addUpgrade(upgrade: string, price: number) {
     if (state.upgrades.indexOf(upgrade) === -1) {
       state.upgrades.push(upgrade);
+      state.sumPurchases += price;
     }
     calculateDps();
   },
   hasUpgrade(id: string) {
     return state.upgrades.indexOf(id) !== -1;
   },
-  increaseProducer(producer: IProducerItem) {
+  hasProducer(id: string) {
+    return state.producers.find((producer) => producer.id === id);
+  },
+  increaseProducer(producer: IProducerItem, price: number) {
     const matchedProducer = state.producers.find(
       (_producer) => _producer.id === producer.id
     );
@@ -128,6 +155,7 @@ export const storeActions = {
         dps: producer.produce,
       });
     }
+    state.sumPurchases += price;
     calculateDps();
   },
 };

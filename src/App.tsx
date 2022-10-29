@@ -14,12 +14,37 @@ export default function App() {
   const config = useConfig();
   const state = useProgress();
 
-  useWorker();
-  const availableUpgrades = useMemo(
+  const roundedSum = useMemo(
     () =>
-      config.upgrades.filter((upgrade) => !storeActions.hasUpgrade(upgrade.id)),
-    [state.upgrades]
+      Math.round((state.count + state.sumPurchases + Number.EPSILON) * 1000) /
+      1000,
+    [state.count, state.sumPurchases]
   );
+
+  useWorker();
+  const availableUpgrades = useMemo(() => {
+    let count = 0;
+    return config.upgrades
+      .sort((a, b) => a.price - b.price)
+      .filter(({ id, price }) => {
+        const isPurchased = storeActions.hasUpgrade(id);
+        const ableToBuy = roundedSum * 2 > price;
+        count += Number(!isPurchased);
+        return !isPurchased && (ableToBuy || count <= 1);
+      });
+  }, [roundedSum, state.sumPurchases]);
+
+  const availableProducers = useMemo(() => {
+    let count = 0;
+    return config.producers.filter(({ basePrice, id }) => {
+      const ableToBuy = roundedSum * 5 > basePrice;
+      const isPurchased = storeActions.hasProducer(id);
+      if (!isPurchased) {
+        count += 1;
+      }
+      return ableToBuy || count <= 1;
+    });
+  }, [roundedSum]);
 
   return (
     <>
@@ -39,7 +64,7 @@ export default function App() {
         <Styled.Column>
           <Styled.SectionTitle>Producers</Styled.SectionTitle>
           <Styled.UpgradesWrapper>
-            {config.producers.map((producer) => (
+            {availableProducers.map((producer) => (
               <ProducerItem key={producer.id} item={producer} />
             ))}
           </Styled.UpgradesWrapper>
