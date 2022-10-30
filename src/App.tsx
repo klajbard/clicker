@@ -9,15 +9,14 @@ import { useConfig } from "./hooks/useConfig";
 import useWorker from "./hooks/useWorker";
 import { storeActions, useProgress } from "./store/main";
 import * as Styled from "./styled";
+import { roundToDecimal } from "./utils/calculate";
 
 export default function App() {
   const config = useConfig();
   const state = useProgress();
 
   const roundedSum = useMemo(
-    () =>
-      Math.round((state.count + state.sumPurchases + Number.EPSILON) * 1000) /
-      1000,
+    () => roundToDecimal(state.count + state.sumPurchases, 3),
     [state.count, state.sumPurchases]
   );
 

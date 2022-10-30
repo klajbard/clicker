@@ -3,10 +3,12 @@ import styled from "styled-components";
 export const Container = styled.button`
   display: grid;
   grid-template-areas:
-    "title title"
+    "title count"
     "price count"
     "descr descr";
-  max-width: 15rem;
+
+  gap: 0.5rem 1rem;
+  width: 18rem;
   padding: 0.5rem;
   background: none;
   cursor: pointer;
@@ -30,19 +32,34 @@ export const Container = styled.button`
 /** Upgrade/Producer */
 export const Title = styled.span`
   grid-area: title;
-  margin-bottom: 1rem;
+  text-align: left;
   font-size: 1.5rem;
   font-weight: bold;
 `;
 
 export const Count = styled.span`
   grid-area: count;
+  font-size: 2.5rem;
+  color: #afafaf;
+  font-weight: bold;
 `;
 
-export const Price = styled.span`
+export const Price = styled.span<{ $disabled?: boolean }>`
   grid-area: price;
+  display: flex;
+  align-items: center;
+  color: ${({ $disabled }) => ($disabled ? "#8b7070" : "#8b0000")};
+
+  svg {
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
 `;
 
-export const Description = styled.span`
+export const Description = styled.span<{ $disabled?: boolean }>`
   grid-area: descr;
+  text-align: left;
+
+  color: ${({ $disabled }) => ($disabled ? "#70708b" : "#00008b")};
+  font-weight: bold;
 `;

@@ -2,6 +2,7 @@ import { proxy, useSnapshot } from "valtio";
 
 import config, { PRODUCER_POW } from "../config";
 import { IProducerItem, UpgradeType } from "../types";
+import { roundToDecimal } from "../utils/calculate";
 
 import { IStore, IStoreRead } from "./types";
 
@@ -13,9 +14,6 @@ const state = proxy<IStore>({
   sumPurchases: 0,
   upgrades: [],
 });
-
-const roundToOneDecimal = (num: number) =>
-  Math.round((num + Number.EPSILON) * 10) / 10;
 
 // Core logic behind calculating the various dps for both clicking and producers
 const calculateDps = () => {
@@ -46,9 +44,13 @@ const calculateDps = () => {
     }
   });
 
+  // Calculate summarized DPS
+  state.producers.forEach((producer) => {
+    state.producerDps += producer.dps * producer.count;
+  });
+
   let allMultiplier = 0;
   let clickMultiplier = 0;
-  const damageFromProducers = 0;
 
   // Calculate click DPS
   state.upgrades.forEach((upgrade) => {
@@ -57,32 +59,23 @@ const calculateDps = () => {
       case UpgradeType.CLICK:
         clickMultiplier += matchedUpgrade.multiply;
         break;
-      case UpgradeType.ALL:
+      case UpgradeType.PROD2CLICK:
         allMultiplier += matchedUpgrade.multiply;
         break;
     }
   });
 
-  state.clickDps =
-    Math.round(
-      ((state.clickDps + damageFromProducers) *
-        clickMultiplier *
-        (1 + allMultiplier) +
-        Number.EPSILON) *
-        100
-    ) / 100;
-
-  // Calculate summarized DPS
-  state.producers.forEach((producer) => {
-    state.producerDps += producer.dps * producer.count * (1 + allMultiplier);
-  });
+  state.clickDps = roundToDecimal(
+    (state.clickDps + state.producerDps * allMultiplier) * clickMultiplier,
+    0
+  );
 };
 
 export const storeActions = {
   init() {
-    const localState = localStorage.getItem("clicker.state");
+    const localState = localStorage.getItem("game");
     if (localState) {
-      const localStateObj = JSON.parse(localState) as IStoreRead;
+      const localStateObj = JSON.parse(atob(localState)) as IStoreRead;
       let sumPurchases = 0;
       state.count = localStateObj.count;
       state.producers = localStateObj.producers;
@@ -105,7 +98,7 @@ export const storeActions = {
     calculateDps();
   },
   update() {
-    state.count = roundToOneDecimal(state.count + 0.1 * state.producerDps);
+    state.count = roundToDecimal(state.count + 0.1 * state.producerDps);
   },
   saveProgress() {
     console.log("Saving progress...");
@@ -114,17 +107,17 @@ export const storeActions = {
       producers: state.producers,
       upgrades: state.upgrades,
     };
-    localStorage.setItem("clicker.state", JSON.stringify(stateToSave));
+    localStorage.setItem("game", btoa(JSON.stringify(stateToSave)));
   },
   updateCount(count: number) {
     state.count = count;
     storeActions.updateWindowTitle();
   },
   updateWindowTitle() {
-    window.document.title = `${state.count} points`;
+    window.document.title = `${roundToDecimal(state.count)} points`;
   },
   addCount(count: number) {
-    state.count = roundToOneDecimal(state.count + count);
+    state.count = roundToDecimal(state.count + count);
   },
   increaseDPS(dps: number) {
     state.producerDps += dps;

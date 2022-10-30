@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useProgress } from "../../store/main";
+import { toHumanReadable } from "../../utils/calculate";
 
 import * as Styled from "./styled";
 
@@ -9,8 +10,8 @@ const Stat = () => {
 
   return (
     <Styled.Stat>
-      <div>Score: {state.count.toFixed(1)}</div>
-      <div>Click per sec: {state.producerDps.toFixed(1)}</div>
+      <div>Score: {toHumanReadable(state.count)}</div>
+      <div>Click per sec: {toHumanReadable(state.producerDps)}</div>
     </Styled.Stat>
   );
 };

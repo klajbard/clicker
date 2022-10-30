@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 
 import { PRODUCER_POW } from "../../config";
+import { PriceTag } from "../../icons/icons";
 import { storeActions, useProgress } from "../../store/main";
 import { IProducerItem } from "../../types";
+import { toHumanReadable } from "../../utils/calculate";
 
 import * as Styled from "./styled";
 
@@ -28,13 +30,18 @@ function ProducerItem({ item }: { item: IProducerItem }) {
     }
   };
 
+  const isDisabled = useMemo(() => state.count < price, [state.count, price]);
+
   return (
-    <Styled.Container onClick={handleClick} disabled={state.count < price}>
+    <Styled.Container onClick={handleClick} disabled={isDisabled}>
       <Styled.Title>{name}</Styled.Title>
-      <Styled.Price>{price}</Styled.Price>
       <Styled.Count>{producerFromState?.count}</Styled.Count>
-      <Styled.Description>
-        Helps with {producerFromState?.dps || produce} additional power!
+      <Styled.Price $disabled={isDisabled}>
+        <PriceTag />
+        {toHumanReadable(price)}
+      </Styled.Price>
+      <Styled.Description $disabled={isDisabled}>
+        &#x21ea; {producerFromState?.dps || produce}
       </Styled.Description>
     </Styled.Container>
   );

@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 
 import config from "../../config";
+import { PriceTag } from "../../icons/icons";
 import { storeActions, useProgress } from "../../store/main";
 import { IUpgradeItem, UpgradeType } from "../../types";
+import { toHumanReadable } from "../../utils/calculate";
 
 import * as Styled from "./styled";
 
@@ -22,7 +24,7 @@ function UpgradeItem({
   const description = useMemo(() => {
     if (type === UpgradeType.CLICK) {
       return `Multiplies clicking power by ${multiply}x!`;
-    } else if (type === UpgradeType.ALL) {
+    } else if (type === UpgradeType.PROD2CLICK) {
       return `Multiply clicking rate by ${multiply * 100}% of DPS!`;
     } else if (type === UpgradeType.PRODUCER) {
       return `Multiplies produce rate of "${
@@ -31,11 +33,18 @@ function UpgradeItem({
     }
   }, [type]);
 
+  const isDisabled = useMemo(() => state.count < price, [state.count, price]);
+
   return (
-    <Styled.Container onClick={handleClick} disabled={state.count < price}>
+    <Styled.Container onClick={handleClick} disabled={isDisabled}>
       <Styled.Title>{name}</Styled.Title>
-      <Styled.Price>{price}</Styled.Price>
-      <Styled.Description>{description}</Styled.Description>
+      <Styled.Price $disabled={isDisabled}>
+        <PriceTag />
+        {toHumanReadable(price)}
+      </Styled.Price>
+      <Styled.Description $disabled={isDisabled}>
+        {description}
+      </Styled.Description>
     </Styled.Container>
   );
 }

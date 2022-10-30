@@ -49,6 +49,7 @@ export const Wrapper = styled.div`
 export const Column = styled.div`
   padding: 1rem 0 2rem;
   width: 100%;
+  box-shadow: inset 0px 0px 3px #3f3f3f;
 `;
 
 export const UpgradesWrapper = styled.div`

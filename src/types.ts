@@ -1,6 +1,7 @@
 export enum UpgradeType {
   CLICK = "click",
   PRODUCER = "producer",
+  PROD2CLICK = "prod2click",
   ALL = "all",
 }
 
