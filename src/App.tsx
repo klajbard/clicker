@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { ThemeProvider } from "styled-components";
 
 import ProducerItem from "./components/Items/ProducerItem";
 import UpgradeItem from "./components/Items/UpgradeItem";
@@ -9,6 +10,7 @@ import { useConfig } from "./hooks/useConfig";
 import useWorker from "./hooks/useWorker";
 import { storeActions, useProgress } from "./store/main";
 import * as Styled from "./styled";
+import theme from "./theme";
 import { roundToDecimal } from "./utils/calculate";
 
 export default function App() {
@@ -46,29 +48,31 @@ export default function App() {
   }, [roundedSum]);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Styled.GlobalStyle />
       <Styled.Wrapper>
         <Trigger />
         <Stat />
         <SaveProgress />
-        <Styled.Column>
-          <Styled.SectionTitle>Upgrades</Styled.SectionTitle>
-          <Styled.UpgradesWrapper>
-            {availableUpgrades.map((upgrade) => (
-              <UpgradeItem key={upgrade.id} item={upgrade} />
-            ))}
-          </Styled.UpgradesWrapper>
-        </Styled.Column>
-        <Styled.Column>
-          <Styled.SectionTitle>Producers</Styled.SectionTitle>
-          <Styled.UpgradesWrapper>
-            {availableProducers.map((producer) => (
-              <ProducerItem key={producer.id} item={producer} />
-            ))}
-          </Styled.UpgradesWrapper>
-        </Styled.Column>
+        <Styled.Container>
+          <Styled.Column>
+            <Styled.SectionTitle>Upgrades</Styled.SectionTitle>
+            <Styled.UpgradesWrapper>
+              {availableUpgrades.map((upgrade) => (
+                <UpgradeItem key={upgrade.id} item={upgrade} />
+              ))}
+            </Styled.UpgradesWrapper>
+          </Styled.Column>
+          <Styled.Column>
+            <Styled.SectionTitle>Producers</Styled.SectionTitle>
+            <Styled.UpgradesWrapper>
+              {availableProducers.map((producer) => (
+                <ProducerItem key={producer.id} item={producer} />
+              ))}
+            </Styled.UpgradesWrapper>
+          </Styled.Column>
+        </Styled.Container>
       </Styled.Wrapper>
-    </>
+    </ThemeProvider>
   );
 }

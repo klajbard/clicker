@@ -1,28 +1,42 @@
 import styled, { createGlobalStyle } from "styled-components";
 
-const sm = (styles: string) => `
-  @media only screen and (max-width: 600px) {
+import { ThemeInterface } from "./theme";
+
+export const md = (styles: string) => `
+  @media only screen and (min-width: 600px) {
     ${styles}
   }
 `;
 
-export const GlobalStyle = createGlobalStyle`
-  html {
-    font-size: 75%;
+export const lg = (styles: string) => `
+  @media only screen and (min-width: 900px) {
+    ${styles}
   }
+`;
 
+export const GlobalStyle = createGlobalStyle<{ theme: ThemeInterface }>`
+  html {
+    font-size: 67.5%;
+  }
+  
   body {
-    font-family: "Arial, Helvetica, sans-serif";
+    font-family: 'Comfortaa', cursive;
     margin: 0;
     cursor: default;
     font-size: 1.5rem;
     line-height: 1.5;
-    background-color: #efefef;
+    background-color: ${({ theme }) => theme.colors.secondary.normal};
+    color: ${({ theme }) => theme.colors.secondary.lightest};
   }
 
-  ${sm(`
+  h1, h2 {
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 2px;
+  }
+
+  ${md(`
     html {
-      font-size: 50%;
+      font-size: 75%;
     }
   `)}
 
@@ -34,22 +48,24 @@ export const GlobalStyle = createGlobalStyle`
 
 export const Wrapper = styled.div`
   box-sizing: border-box;
-  margin: 2rem;
-  min-height: 62rem;
+  margin: 1rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const Container = styled.div`
+  ${lg(`
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+  `)}
   padding: 1rem 2rem;
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 0.5rem;
-  border: 1px solid #000;
-  box-shadow: 4px 6px #000;
 `;
 
 export const Column = styled.div`
-  padding: 1rem 0 2rem;
+  box-sizing: border-box;
   width: 100%;
-  box-shadow: inset 0px 0px 3px #3f3f3f;
 `;
 
 export const UpgradesWrapper = styled.div`
@@ -57,7 +73,7 @@ export const UpgradesWrapper = styled.div`
   justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2px;
 `;
 
 export const SectionTitle = styled.h2`

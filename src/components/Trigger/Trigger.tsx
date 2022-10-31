@@ -10,8 +10,10 @@ const TriggerButton = styled.button`
   height: 15rem;
   font-size: 6rem;
   cursor: pointer;
-  background: none;
   border: 2px solid black;
+  font-family: "Fredoka One", cursive;
+  color: ${({ theme }) => theme.colors.secondary.lighter};
+  background: ${({ theme }) => theme.colors.main.normal};
 `;
 
 const createHitElement = (
@@ -30,6 +32,7 @@ const createHitElement = (
   hitElement.style.top = `${positionY + offsets.y}px`;
   hitElement.style.pointerEvents = "none";
   hitElement.style.transition = "all 2s ease-out";
+  hitElement.style.color = "#4f4f4f";
 
   return hitElement;
 };

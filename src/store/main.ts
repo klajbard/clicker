@@ -50,14 +50,14 @@ const calculateDps = () => {
   });
 
   let allMultiplier = 0;
-  let clickMultiplier = 0;
+  let clickMultiplier = 1;
 
   // Calculate click DPS
   state.upgrades.forEach((upgrade) => {
     const matchedUpgrade = config.upgrades.find(({ id }) => upgrade === id);
     switch (matchedUpgrade?.type) {
       case UpgradeType.CLICK:
-        clickMultiplier += matchedUpgrade.multiply;
+        clickMultiplier *= matchedUpgrade.multiply;
         break;
       case UpgradeType.PROD2CLICK:
         allMultiplier += matchedUpgrade.multiply;
@@ -66,7 +66,7 @@ const calculateDps = () => {
   });
 
   state.clickDps = roundToDecimal(
-    (state.clickDps + state.producerDps * allMultiplier) * clickMultiplier,
+    state.clickDps * clickMultiplier + state.producerDps * allMultiplier,
     0
   );
 };
