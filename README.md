@@ -1,8 +1,10 @@
 # Clicker game
 
+![clicker.gif](./.github/clicker.gif)
+
 ## Frontend
 
-React app with typescript
+React app with typescript (http://clicker.klajbar.com/)
 
 ### Commands
 
@@ -45,8 +47,6 @@ It is also possible to save the progress manually by clicking the "Save progress
 
 ## TODO
 
-- Write TODOs inside the app
-- Have cleaner design
 - Create unit tests
 - identify parts which could be written more efficiently
 - Create cypress tests
