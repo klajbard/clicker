@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { ThemeProvider } from "styled-components";
 
 import ProducerItem from "./components/Items/ProducerItem";
@@ -23,6 +23,7 @@ export default function App() {
   );
 
   useWorker();
+  // Showing only the next few upgrades instead of all of them
   const availableUpgrades = useMemo(() => {
     let count = 0;
     return config.upgrades
@@ -35,6 +36,7 @@ export default function App() {
       });
   }, [roundedSum, state.sumPurchases]);
 
+  // Showing only the next few upgrades instead of all of them
   const availableProducers = useMemo(() => {
     let count = 0;
     return config.producers.filter(({ basePrice, id }) => {

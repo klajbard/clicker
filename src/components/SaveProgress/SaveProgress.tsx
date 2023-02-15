@@ -1,13 +1,13 @@
-import React from "react";
+import { useCallback } from "react";
 
 import { storeActions } from "../../store/main";
 
 import * as Styled from "./styled";
 
 const SaveProgress = () => {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     storeActions.saveProgress();
-  };
+  }, []);
 
   return <Styled.Button onClick={handleClick}>Save progress</Styled.Button>;
 };

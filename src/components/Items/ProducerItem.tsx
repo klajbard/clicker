@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { PRODUCER_POW } from "../../config";
 import { PriceTag } from "../../icons/icons";
@@ -11,37 +11,33 @@ import * as Styled from "./styled";
 function ProducerItem({ item }: { item: IProducerItem }) {
   const state = useProgress();
   const { basePrice, id, name, produce } = item;
-  const producerFromState = state.producers.find(
-    (_producer) => _producer.id === id
-  );
+  const producer = state.producers.find((producer) => producer.id === id);
 
   const price = useMemo(
-    () =>
-      Math.floor(
-        basePrice * Math.pow(PRODUCER_POW, producerFromState?.count || 0)
-      ),
-    [producerFromState?.count]
+    () => Math.floor(basePrice * Math.pow(PRODUCER_POW, producer?.count || 0)),
+    [producer?.count]
   );
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (state.count >= price) {
       storeActions.increaseProducer(item, price);
       storeActions.addCount(-price);
     }
-  };
+  }, [item, price]);
 
   const isDisabled = useMemo(() => state.count < price, [state.count, price]);
+  const humanReadablePrice = useMemo(() => toHumanReadable(price), [price]);
 
   return (
     <Styled.Container onClick={handleClick} disabled={isDisabled}>
       <Styled.Title>{name}</Styled.Title>
-      <Styled.Count>{producerFromState?.count}</Styled.Count>
+      <Styled.Count>{producer?.count}</Styled.Count>
       <Styled.Price $disabled={isDisabled}>
         <PriceTag />
-        {toHumanReadable(price)}
+        {humanReadablePrice}
       </Styled.Price>
       <Styled.Description $disabled={isDisabled}>
-        &#x21ea; {producerFromState?.dps || produce}
+        &#x21ea; {producer?.dps || produce}
       </Styled.Description>
     </Styled.Container>
   );

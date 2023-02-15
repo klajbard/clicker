@@ -1,20 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import styled from "styled-components";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { storeActions, useProgress } from "../../store/main";
 import { toHumanReadable } from "../../utils/calculate";
 
-const TriggerButton = styled.button`
-  width: 100%;
-  max-width: 50rem;
-  height: 15rem;
-  font-size: 6rem;
-  cursor: pointer;
-  border: 2px solid black;
-  font-family: "Fredoka One", cursive;
-  color: ${({ theme }) => theme.colors.secondary.lighter};
-  background: ${({ theme }) => theme.colors.main.normal};
-`;
+import * as Styled from "./styled";
 
 const createHitElement = (
   hit: string,
@@ -69,7 +58,7 @@ const Trigger = () => {
 
   return (
     <>
-      <TriggerButton onClick={handleClick}>Click!</TriggerButton>
+      <Styled.TriggerButton onClick={handleClick}>Click!</Styled.TriggerButton>
       <div>{hit}</div>
     </>
   );

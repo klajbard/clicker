@@ -1,12 +1,12 @@
-import React, { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
-import config from "../../config";
 import { PriceTag } from "../../icons/icons";
 import { storeActions, useProgress } from "../../store/main";
-import { IUpgradeItem, UpgradeType } from "../../types";
+import { IUpgradeItem } from "../../types";
 import { toHumanReadable } from "../../utils/calculate";
 
 import * as Styled from "./styled";
+import { getDescription } from "./utils";
 
 function UpgradeItem({
   item: { id, name, price, multiply, type, producerID },
@@ -14,33 +14,26 @@ function UpgradeItem({
   item: IUpgradeItem;
 }) {
   const state = useProgress();
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (state.count >= price) {
       storeActions.addUpgrade(id, price);
       storeActions.addCount(-price);
     }
-  };
+  }, [id, price]);
 
-  const description = useMemo(() => {
-    if (type === UpgradeType.CLICK) {
-      return `Multiplies clicking power by ${multiply}x!`;
-    } else if (type === UpgradeType.PROD2CLICK) {
-      return `Multiply clicking rate by ${multiply * 100}% of DPS!`;
-    } else if (type === UpgradeType.PRODUCER) {
-      return `Multiplies produce rate of "${
-        config.producers.find((producer) => producer.id === producerID)?.name
-      }" by ${multiply}x!`;
-    }
-  }, [type]);
-
+  const description = useMemo(
+    () => getDescription(type, multiply, producerID),
+    [multiply, type, producerID]
+  );
   const isDisabled = useMemo(() => state.count < price, [state.count, price]);
+  const humanReadablePrice = useMemo(() => toHumanReadable(price), [price]);
 
   return (
     <Styled.Container onClick={handleClick} disabled={isDisabled}>
       <Styled.Title>{name}</Styled.Title>
       <Styled.Price $disabled={isDisabled}>
         <PriceTag />
-        {toHumanReadable(price)}
+        {humanReadablePrice}
       </Styled.Price>
       <Styled.Description $disabled={isDisabled}>
         {description}

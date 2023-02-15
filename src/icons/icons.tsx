@@ -1,6 +1,6 @@
-import React from "react";
+import { SVGProps } from "react";
 
-export function PriceTag(props: React.SVGProps<SVGSVGElement>) {
+export function PriceTag(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 32 32" {...props}>
       <path

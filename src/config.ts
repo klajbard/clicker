@@ -1,5 +1,6 @@
-import { IConfig, ProducerID, UpgradeType } from "./types";
+import { IConfig, UpgradeType } from "./types";
 
+// Some magic number to calculate current price of upgrades
 export const PRODUCER_POW = 1.17;
 
 // Test config to initially cover different cases
@@ -63,7 +64,7 @@ const config: IConfig = {
       multiply: 2,
       type: UpgradeType.PRODUCER,
       price: 5000,
-      producerID: ProducerID.prdcr1,
+      producerID: "prdcr1",
     },
     {
       id: "upgrdprd2",
@@ -71,7 +72,7 @@ const config: IConfig = {
       multiply: 2,
       type: UpgradeType.PRODUCER,
       price: 190000,
-      producerID: ProducerID.prdcr2,
+      producerID: "prdcr2",
     },
     {
       id: "upgrdprd3",
@@ -79,7 +80,7 @@ const config: IConfig = {
       multiply: 2,
       type: UpgradeType.PRODUCER,
       price: 2000000,
-      producerID: ProducerID.prdcr3,
+      producerID: "prdcr3",
     },
     {
       id: "upgrdprd4",
@@ -87,7 +88,7 @@ const config: IConfig = {
       multiply: 2,
       type: UpgradeType.PRODUCER,
       price: 10000000,
-      producerID: ProducerID.prdcr4,
+      producerID: "prdcr4",
     },
     // Upgrades multiplying click power based on the power of producers
     {
@@ -114,22 +115,22 @@ const config: IConfig = {
   ],
   // Producers generating points over time
   producers: [
-    { id: ProducerID.prdcr1, name: "Producer 1", produce: 1, basePrice: 10 },
-    { id: ProducerID.prdcr2, name: "Producer 2", produce: 10, basePrice: 140 },
+    { id: "prdcr1", name: "Producer 1", produce: 1, basePrice: 10 },
+    { id: "prdcr2", name: "Producer 2", produce: 10, basePrice: 140 },
     {
-      id: ProducerID.prdcr3,
+      id: "prdcr3",
       name: "Producer 3",
       produce: 80,
       basePrice: 20000,
     },
     {
-      id: ProducerID.prdcr4,
+      id: "prdcr4",
       name: "Producer 4",
       produce: 500,
       basePrice: 350000,
     },
     {
-      id: ProducerID.prdcr5,
+      id: "prdcr5",
       name: "Producer 5",
       produce: 2750,
       basePrice: 5000000,

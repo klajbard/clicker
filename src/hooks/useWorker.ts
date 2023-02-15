@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { storeActions, useProgress } from "../store/main";
 import { TWorkerMessage } from "../types";
@@ -14,18 +14,21 @@ const useWorker = () => {
     localState.current = { count: state.count, dps: state.producerDps };
   }, [state.count, state.producerDps]);
 
-  const createSetInterval = () =>
-    setInterval(() => {
-      if (titleUpdater.current) {
-        titleUpdater.current -= 1;
-      } else {
-        titleUpdater.current = 20;
-        // Updates browser title every 2 seconds when tab out of focus
-        storeActions.updateWindowTitle();
-      }
-      // Use the same timer to update store with new value
-      storeActions.update();
-    }, 100);
+  const createSetInterval = useCallback(
+    () =>
+      setInterval(() => {
+        if (titleUpdater.current) {
+          titleUpdater.current -= 1;
+        } else {
+          titleUpdater.current = 20;
+          // Updates browser title every 2 seconds when tab out of focus
+          storeActions.updateWindowTitle();
+        }
+        // Use the same timer to update store with new value
+        storeActions.update();
+      }, 100),
+    []
+  );
 
   useEffect(() => {
     storeActions.init();

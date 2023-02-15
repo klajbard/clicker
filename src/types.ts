@@ -1,17 +1,12 @@
 export enum UpgradeType {
+  // Upgrades click power
   CLICK = "click",
+  // Upgrades producer power
   PRODUCER = "producer",
+  // Upgrades click power based on the power of producers
   PROD2CLICK = "prod2click",
+  // Upgrades all damage
   ALL = "all",
-}
-
-export enum ProducerID {
-  all = "all",
-  prdcr1 = "prdcr1",
-  prdcr2 = "prdcr2",
-  prdcr3 = "prdcr3",
-  prdcr4 = "prdcr4",
-  prdcr5 = "prdcr5",
 }
 
 export interface IUpgradeItem {
