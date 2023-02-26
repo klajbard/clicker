@@ -8,10 +8,10 @@ React app with typescript (http://clicker.klajbar.com/)
 
 ### Commands
 
-- yarn start - start dev server
-- yarn build - build output into '/dist' folder
-- yarn lint - statical code analysis
-- yarn prettier - format code
+- pnpm start - start dev server
+- pnpm build - build output into '/dist' folder
+- pnpm lint - statical code analysis
+- pnpm prettier - format code
 
 ### Deploy
 
