@@ -7,6 +7,7 @@ import ProducerItem from "./components/Items/ProducerItem";
 import UpgradeItem from "./components/Items/UpgradeItem";
 import OfflineProgress from "./components/OfflineProgress/OfflineProgress";
 import Prestige from "./components/Prestige/Prestige";
+import SaveIndicator from "./components/SaveIndicator/SaveIndicator";
 import Settings from "./components/Settings/Settings";
 import Stats from "./components/Stats/Stats";
 import Toast from "./components/Toast/Toast";
@@ -222,6 +223,7 @@ export default function App() {
         <GoldenCookie />
         <Toast />
         <OfflineProgress />
+        <SaveIndicator />
       </Styled.Wrapper>
     </ThemeProvider>
   );

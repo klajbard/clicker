@@ -343,6 +343,7 @@ export const storeActions = {
     };
     state.lastSaveTime = stateToSave.lastSaveTime;
     localStorage.setItem("game", btoa(JSON.stringify(stateToSave)));
+    window.dispatchEvent(new CustomEvent("game-saved"));
   },
 
   updateCount(count: number) {
@@ -391,11 +392,7 @@ export const storeActions = {
     return state.producers.find((producer) => producer.id === id);
   },
 
-  increaseProducer(
-    producer: IProducerItem,
-    amount = 1,
-    totalPrice: number
-  ) {
+  increaseProducer(producer: IProducerItem, amount = 1, totalPrice: number) {
     const matchedProducer = state.producers.find(
       (_producer) => _producer.id === producer.id
     );

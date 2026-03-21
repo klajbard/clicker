@@ -32,7 +32,7 @@ const useWorker = () => {
     storeActions.init();
     saveInterval.current = setInterval(() => {
       storeActions.saveProgress();
-    }, 30 * 1000);
+    }, 10 * 1000);
 
     // Periodically check achievements
     const achievementInterval = setInterval(() => {
