@@ -1,44 +1,106 @@
 import { useCallback, useMemo } from "react";
 
-import { PRODUCER_POW } from "../../config";
-import { PriceTag } from "../../icons/icons";
 import { storeActions, useProgress } from "../../store/main";
-import { IProducerItem } from "../../types";
+import { BulkBuyOption, IProducerItem } from "../../types";
 import { toHumanReadable } from "../../utils/calculate";
 
 import * as Styled from "./styled";
 
-function ProducerItem({ item }: { item: IProducerItem }) {
+type TierName = "common" | "uncommon" | "rare" | "epic" | "legendary";
+
+const producerTier: Record<string, TierName> = {
+  prdcr1: "common",
+  prdcr2: "common",
+  prdcr3: "uncommon",
+  prdcr4: "uncommon",
+  prdcr5: "rare",
+  prdcr6: "rare",
+  prdcr7: "epic",
+  prdcr8: "epic",
+  prdcr9: "legendary",
+  prdcr10: "legendary",
+};
+
+function ProducerItem({
+  item,
+  bulkBuy,
+}: {
+  item: IProducerItem;
+  bulkBuy: BulkBuyOption;
+}) {
   const state = useProgress();
-  const { basePrice, id, name, produce } = item;
-  const producer = state.producers.find((producer) => producer.id === id);
+  const { basePrice, id, name, produce, icon } = item;
+  const producer = state.producers.find((p) => p.id === id);
+  const currentCount = producer?.count || 0;
+
+  const bulkAmount = useMemo(() => {
+    if (bulkBuy === "max") {
+      return storeActions.getMaxAffordable(basePrice, currentCount);
+    }
+    return bulkBuy;
+  }, [bulkBuy, basePrice, currentCount, state.count]);
 
   const price = useMemo(
-    () => Math.floor(basePrice * Math.pow(PRODUCER_POW, producer?.count || 0)),
-    [producer?.count]
+    () =>
+      bulkAmount > 0
+        ? storeActions.getProducerPrice(basePrice, currentCount, bulkAmount)
+        : storeActions.getProducerPrice(basePrice, currentCount, 1),
+    [basePrice, currentCount, bulkAmount]
+  );
+
+  const isDisabled = useMemo(
+    () => state.count < price || bulkAmount <= 0,
+    [state.count, price, bulkAmount]
+  );
+
+  const progress = useMemo(
+    () => (price > 0 ? Math.min(state.count / price, 1) : 0),
+    [state.count, price]
   );
 
   const handleClick = useCallback(() => {
-    if (state.count >= price) {
-      storeActions.increaseProducer(item, price);
-      storeActions.addCount(-price);
-    }
-  }, [item, price]);
+    storeActions.buyProducer(item, bulkBuy);
+  }, [item, bulkBuy]);
 
-  const isDisabled = useMemo(() => state.count < price, [state.count, price]);
   const humanReadablePrice = useMemo(() => toHumanReadable(price), [price]);
+  const dps = producer?.dps || produce;
+  const tier = producerTier[id] || "common";
+
+  const buyLabel =
+    bulkBuy === "max"
+      ? bulkAmount > 0
+        ? `Buy ${bulkAmount}`
+        : "Buy max"
+      : bulkBuy > 1
+      ? `Buy ${bulkBuy}`
+      : "";
 
   return (
-    <Styled.Container onClick={handleClick} disabled={isDisabled}>
-      <Styled.Title>{name}</Styled.Title>
-      <Styled.Count>{producer?.count}</Styled.Count>
-      <Styled.Price $disabled={isDisabled}>
-        <PriceTag />
-        {humanReadablePrice}
-      </Styled.Price>
+    <Styled.Container onClick={handleClick} disabled={isDisabled} $tier={tier}>
+      <Styled.IconArea>{icon}</Styled.IconArea>
+      <Styled.Title>
+        {name}
+        {buyLabel && (
+          <span
+            style={{
+              fontSize: "1rem",
+              fontWeight: "normal",
+              marginLeft: "0.5rem",
+              color: "#8888aa",
+            }}
+          >
+            ({buyLabel})
+          </span>
+        )}
+      </Styled.Title>
+      <Styled.Count>{currentCount}</Styled.Count>
+      <Styled.Price $disabled={isDisabled}>{humanReadablePrice}</Styled.Price>
       <Styled.Description $disabled={isDisabled}>
-        &#x21ea; {producer?.dps || produce}
+        {"\u21EA"} {toHumanReadable(dps)}/s
       </Styled.Description>
+      <Styled.ProgressBarBg>
+        <Styled.ProgressBarFill $progress={progress} />
+      </Styled.ProgressBarBg>
     </Styled.Container>
   );
 }

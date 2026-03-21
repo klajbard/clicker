@@ -21,10 +21,8 @@ const useWorker = () => {
           titleUpdater.current -= 1;
         } else {
           titleUpdater.current = 20;
-          // Updates browser title every 2 seconds when tab out of focus
           storeActions.updateWindowTitle();
         }
-        // Use the same timer to update store with new value
         storeActions.update();
       }, 100),
     []
@@ -34,11 +32,16 @@ const useWorker = () => {
     storeActions.init();
     saveInterval.current = setInterval(() => {
       storeActions.saveProgress();
-      // Saves progress automatically each 30 seconds
     }, 30 * 1000);
+
+    // Periodically check achievements
+    const achievementInterval = setInterval(() => {
+      storeActions.checkAchievements();
+    }, 5000);
 
     return () => {
       clearInterval(saveInterval.current);
+      clearInterval(achievementInterval);
     };
   }, []);
 
@@ -60,7 +63,6 @@ const useWorker = () => {
     let worker: Worker;
     interval.current = createSetInterval();
     if (window.Worker) {
-      // Creates the web worker which will operate only when tab is out of focus.
       worker = new Worker(new URL("../worker.js", import.meta.url));
       window.addEventListener("blur", handleWindowBlur);
       window.addEventListener("focus", handleWindowFocus);

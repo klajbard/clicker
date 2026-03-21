@@ -19,3 +19,20 @@ export const getDescription = (
       return "";
   }
 };
+
+const tierMap: Record<string, string> = {
+  prdcr1: "#aaaacc",
+  prdcr2: "#aaaacc",
+  prdcr3: "#00cc66",
+  prdcr4: "#00cc66",
+  prdcr5: "#3399ff",
+  prdcr6: "#3399ff",
+  prdcr7: "#aa44ff",
+  prdcr8: "#aa44ff",
+  prdcr9: "#ff8800",
+  prdcr10: "#ff8800",
+};
+
+export const getTierColor = (producerId: string): string => {
+  return tierMap[producerId] || "#aaaacc";
+};

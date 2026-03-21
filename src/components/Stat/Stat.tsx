@@ -20,7 +20,7 @@ const Stat = () => {
   return (
     <Styled.Stat>
       <div>Score: {humanReadableScore}</div>
-      <div>Click per sec: {humanReadableDps}</div>
+      <div>DPS: {humanReadableDps}</div>
     </Styled.Stat>
   );
 };
