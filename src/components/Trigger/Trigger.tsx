@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { storeActions, useProgress } from "../../store/main";
 import { toHumanReadable } from "../../utils/calculate";
+import OrbitalIcons from "../OrbitalIcons/OrbitalIcons";
 
 import * as Styled from "./styled";
 
@@ -145,7 +146,12 @@ const Trigger = () => {
   return (
     <Styled.TriggerWrapper>
       <Styled.ParticleContainer />
-      <Styled.TriggerButton onClick={handleClick}>&#9889;</Styled.TriggerButton>
+      <Styled.ButtonContainer>
+        <OrbitalIcons />
+        <Styled.TriggerButton onClick={handleClick}>
+          &#9889;
+        </Styled.TriggerButton>
+      </Styled.ButtonContainer>
       <Styled.ClickPower>
         &#9889; <span>{clickPower}</span> per click
       </Styled.ClickPower>

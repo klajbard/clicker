@@ -13,6 +13,7 @@ const tierColors: Record<TierName, string> = {
 };
 
 export const Container = styled.button<{ $tier?: TierName }>`
+  user-select: none;
   display: grid;
   grid-template-columns: 3.5rem 1fr auto;
   grid-template-rows: auto auto auto;

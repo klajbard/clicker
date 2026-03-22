@@ -116,8 +116,10 @@ export const TriggerButton = styled.button`
 `;
 
 export const ClickPower = styled.div`
+  margin-top: 2.5rem;
+  user-select: none;
   font-family: "Comfortaa", cursive;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: ${({ theme }) => theme.colors.text.secondary};
   text-align: center;
   letter-spacing: 1px;
@@ -126,7 +128,15 @@ export const ClickPower = styled.div`
     color: ${({ theme }) => theme.colors.accent.primary};
     text-shadow: ${({ theme }) => theme.shadows.neon};
     font-family: "Fredoka One", cursive;
+    font-size: 3.2rem;
   }
+`;
+
+export const ButtonContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ParticleContainer = styled.div`
